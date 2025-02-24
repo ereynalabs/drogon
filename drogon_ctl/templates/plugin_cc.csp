@@ -1,8 +1,12 @@
 /**
- *
- *  [[filename]].cc
- *
- */
+* @copyright Copyright (C) 2025, Ereyna Labs Ltd. - All Rights Reserved
+* @file [[filename]].cc
+* @parblock
+* This file is subject to the terms and conditions defined in file 'LICENSE.md',
+* which is part of this source code package.  Proprietary and confidential.
+* @endparblock
+* @author Dave Linten <david@ereynalabs.com>
+*/
 
 #include "[[filename]].h"
 
