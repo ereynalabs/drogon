@@ -202,9 +202,16 @@ namespace drogon_model::[[dbName]]
         static size_t getColumnNumber() noexcept {  return {% cols.size() %};  }
         static const std::string &getColumnName(size_t index) noexcept(false);
 
+<<<<<<< HEAD
         Json::Value toJson() const;
         Json::Value toMasqueradedJson(const std::vector<std::string> &pMasqueradingVector) const;
         /// Relationship interfaces
+=======
+    Json::Value toJson() const;
+    std::string toString() const;
+    Json::Value toMasqueradedJson(const std::vector<std::string> &pMasqueradingVector) const;
+    /// Relationship interfaces
+>>>>>>> 8079e76a (models: add toString method (#2339))
 <%c++
     for(auto &relationship : relationships)
     {
