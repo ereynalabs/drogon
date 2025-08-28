@@ -25,7 +25,7 @@ CMAKE_DEPENDENT_OPTION(USE_SPDLOG "Allow using the spdlog logging library" OFF "
 
 set(DROGON_MAJOR_VERSION 1)
 set(DROGON_MINOR_VERSION 9)
-set(DROGON_PATCH_VERSION 10)
+set(DROGON_PATCH_VERSION 11)
 set(DROGON_VERSION
     ${DROGON_MAJOR_VERSION}.${DROGON_MINOR_VERSION}.${DROGON_PATCH_VERSION})
 set(DROGON_VERSION_STRING "${DROGON_VERSION}")
@@ -121,6 +121,7 @@ endif()
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib/inc>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/lib/inc>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/orm_lib/inc>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/nosql_lib/redis/inc>
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
@@ -342,21 +343,21 @@ set(private_headers
     lib/src/ConfigAdapter.h
     lib/src/MultipartStreamParser.h)
 
-if (NOT WIN32)
+if (NOT WIN32 AND NOT CMAKE_SYSTEM_NAME STREQUAL "iOS")
     set(DROGON_SOURCES
         ${DROGON_SOURCES}
         lib/src/SharedLibManager.cc)
     set(private_headers
         ${private_headers}
         lib/src/SharedLibManager.h)
-else (NOT WIN32)
+elseif(WIN32)
     set(DROGON_SOURCES
         ${DROGON_SOURCES}
         third_party/mman-win32/mman.c)
     set(private_headers
         ${private_headers}
         third_party/mman-win32/mman.h)
-endif (NOT WIN32)
+endif()
 
 if (BUILD_POSTGRESQL)
     # find postgres
@@ -510,7 +511,7 @@ execute_process(COMMAND "git" rev-parse HEAD
     OUTPUT_VARIABLE GIT_SHA1
     ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 configure_file("${PROJECT_SOURCE_DIR}/cmake/templates/version.h.in"
-    "${PROJECT_SOURCE_DIR}/lib/inc/drogon/version.h" @ONLY)
+    "${CMAKE_CURRENT_BINARY_DIR}/lib/inc/drogon/version.h" @ONLY)
 
 if (DROGON_CXX_STANDARD EQUAL 20)
     option(USE_COROUTINE "Enable C++20 coroutine support" ON)
@@ -583,7 +584,7 @@ set(DROGON_HEADERS
     lib/inc/drogon/WebSocketConnection.h
     lib/inc/drogon/WebSocketController.h
     lib/inc/drogon/drogon.h
-    lib/inc/drogon/version.h
+    ${CMAKE_CURRENT_BINARY_DIR}/lib/inc/drogon/version.h
     lib/inc/drogon/drogon_callbacks.h
     lib/inc/drogon/PubSubService.h
     lib/inc/drogon/drogon_test.h
